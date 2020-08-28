@@ -40,15 +40,15 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     override fun onConnected() {
-        
+        connection_status_tv.text = "Connected"
     }
 
     override fun onConnectionSlow() {
-
+        connection_status_tv.text = "Slow Internet Connection"
     }
 
     override fun onDisconnected() {
-
+        connection_status_tv.text = "Disconnected"
     }
 }
 ```
