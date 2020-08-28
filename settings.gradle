@@ -1,0 +1,3 @@
+include ':app'
+include ':connection_checker'
+rootProject.name = "Connection Checker"
