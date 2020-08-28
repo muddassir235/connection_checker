@@ -1,7 +1,7 @@
 # ConnectionChecker
 Android library for checking the internet connectivity of a device.
 
-Instanciate an object
+Instantiate an object
 ```
 val connectionChecker = ConnectionChecker(this, lifecycle)
 ```
