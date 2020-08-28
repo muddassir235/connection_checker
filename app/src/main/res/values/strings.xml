@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Connection Checker</string>
+    <string name="connected">Connected</string>
 </resources>
