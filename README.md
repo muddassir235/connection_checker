@@ -23,7 +23,7 @@ connectionChecker.connectivityListener = object: ConnectivityListener {
 ```
 Start checking the connection.
 ```
- connectionChecker.startChecking()
+connectionChecker.startChecking()
 ```
 
 Example in an android activity.
