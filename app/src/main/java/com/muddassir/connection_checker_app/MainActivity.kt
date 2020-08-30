@@ -3,6 +3,7 @@ package com.muddassir.connection_checker_app
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.muddassir.connection_checker.ConnectionChecker
+import com.muddassir.connection_checker.ConnectionState
 import com.muddassir.connection_checker.ConnectivityListener
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,18 +14,15 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         val connectionChecker = ConnectionChecker(this, lifecycle)
         connectionChecker.connectivityListener = this
-        connectionChecker.startChecking()
     }
-
-    override fun onConnected() {
-        connection_status_tv.text = "Connected"
-    }
-
-    override fun onConnectionSlow() {
-        connection_status_tv.text = "Slow Internet Connection"
-    }
-
-    override fun onDisconnected() {
-        connection_status_tv.text = "Disconnected"
+    
+    override fun onConnectionState(state: ConnectionState) {
+        connection_status_tv.text = if(state == ConnectionState.CONNECTED) {
+            "Connected"
+        } else if(state == ConnectionState.SLOW) {
+            "Slow Internet Connection"
+        } else {
+            "Disconnected"
+        }
     }
 }
