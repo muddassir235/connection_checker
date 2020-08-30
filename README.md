@@ -1,4 +1,6 @@
 # ConnectionChecker
+Status: [![Release](https://jitpack.io/v/User/Repo.svg?style=flat-square)]
+(https://jitpack.io/#muddassir235/connection_checker/)
 Android library for checking the internet connectivity of a device.
 
 ## Add Dependencies:
@@ -18,7 +20,7 @@ and the following in your app level build.gradle
 ```groovy
 dependencies {
     // ...
-    implementation 'com.github.muddassir235:connection_checker:v1.1'
+    implementation 'com.github.muddassir235:connection_checker:v1.3'
 }
 ```
 
@@ -31,22 +33,10 @@ val connectionChecker = ConnectionChecker(this, lifecycle)
 Add connectivity listener
 ```kotlin
 connectionChecker.connectivityListener = object: ConnectivityListener {
-    override fun onConnected() {
-
-    }
-
-    override fun onConnectionSlow() {
-
-    }
-
-    override fun onDisconnected() {
+    override fun onConnectionState(state: ConnectionState) {
 
     }
 }
-```
-Start checking the connection.
-```kotlin
-connectionChecker.startChecking()
 ```
 
 Example in an android activity.
@@ -58,20 +48,16 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         val connectionChecker = ConnectionChecker(this, lifecycle)
         connectionChecker.connectivityListener = this
-        
-        connectionChecker.startChecking()
     }
 
-    override fun onConnected() {
-        connection_status_tv.text = "Connected"
-    }
-
-    override fun onConnectionSlow() {
-        connection_status_tv.text = "Slow Internet Connection"
-    }
-
-    override fun onDisconnected() {
-        connection_status_tv.text = "Disconnected"
+    override fun onConnectionState(state: ConnectionState) {
+        connection_status_tv.text = if(state == ConnectionState.CONNECTED) {
+            "Connected"
+        } else if(state == ConnectionState.SLOW) {
+            "Slow Internet Connection"
+        } else {
+            "Disconnected"
+        }
     }
 }
 ```
