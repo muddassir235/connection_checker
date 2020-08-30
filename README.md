@@ -2,7 +2,7 @@
 
 Android library for checking the internet connectivity of a device.
 
-## Add Dependencies:
+## Add Dependencies
 Add the following in your project level build.gradle
 ```groovy
 // ...
