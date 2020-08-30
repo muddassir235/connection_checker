@@ -1,6 +1,5 @@
 # ConnectionChecker
-Status: [![Release](https://jitpack.io/v/User/Repo.svg?style=flat-square)]
-(https://jitpack.io/#muddassir235/connection_checker/)
+
 Android library for checking the internet connectivity of a device.
 
 ## Add Dependencies:
@@ -39,6 +38,7 @@ connectionChecker.connectivityListener = object: ConnectivityListener {
 }
 ```
 
+## Example
 Example in an android activity.
 ```kotlin
 class MainActivity : AppCompatActivity(), ConnectivityListener {
