@@ -1,7 +1,6 @@
 # ConnectionChecker
 
-Status: [![Release](https://jitpack.io/v/muddassir235/connection_checker.svg)]
-(https://jitpack.io/#muddassir235/connection_checker/)
+[![Release](https://jitpack.io/v/muddassir235/connection_checker.svg?style=flat-square)](https://jitpack.io/#muddassir235/connection_checker/)
 
 Android library for checking the internet connectivity of a device.
 
