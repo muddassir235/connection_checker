@@ -36,7 +36,7 @@ connectionChecker.connectivityListener = object: ConnectivityListener {
 ```
 
 ## Example
-Example in an android activity.
+Example in an Android Activity.
 ```kotlin
 class MainActivity : AppCompatActivity(), ConnectivityListener {
     override fun onCreate(savedInstanceState: Bundle?) {
