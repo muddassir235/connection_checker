@@ -16,7 +16,7 @@ allprojects {
 and the following in your app level build.gradle
 ```groovy
 dependencies {
-    implementation 'com.github.muddassir235:connection_checker:v1.3'
+    implementation 'com.github.muddassir235:connection_checker:1.4'
 }
 ```
 
