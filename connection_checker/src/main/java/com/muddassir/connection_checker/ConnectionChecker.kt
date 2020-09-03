@@ -16,6 +16,7 @@ package com.muddassir.connection_checker
 
 import android.content.Context
 import androidx.lifecycle.Lifecycle
+import com.muddassir.kmacros.delay
 
 enum class ConnectionState {
     CONNECTED, SLOW, DISCONNECTED
