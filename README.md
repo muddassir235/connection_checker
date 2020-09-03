@@ -58,3 +58,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 }
 ```
+
+## Uses
+* https://github.com/muddassir235/kmacros
