@@ -24,8 +24,13 @@ dependencies {
 
 Instantiate an object
 ```kotlin
-val connectionChecker = ConnectionChecker(this, lifecycle)
+val connectionChecker = ConnectionChecker(this, lifecycle) 
 ```
+By default it will ping https://www.google.com. The user can set the url to ping.
+```kotlin
+val connectionChecker = ConnectionChecker(this, lifecycle, "https://www.site.url") 
+```
+
 Add connectivity listener
 ```kotlin
 connectionChecker.connectivityListener = object: ConnectivityListener {
