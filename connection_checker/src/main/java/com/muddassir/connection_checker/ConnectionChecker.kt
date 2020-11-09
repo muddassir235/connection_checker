@@ -26,11 +26,9 @@ interface ConnectivityListener {
     fun onConnectionState(state: ConnectionState)
 }
 
-class ConnectionChecker(private val context: Context, private val lifecycle: Lifecycle?) {
+class ConnectionChecker(private val context: Context, private val lifecycle: Lifecycle?,
+                        private val url: String = "https://www.google.com") {
     private var currentState = ConnectionState.CONNECTED
-
-    /* The connectivity checker will ping this url continuously */
-    private val url = "https://www.google.com"
 
     var connectivityListener: ConnectivityListener? = null
         set(value) {
