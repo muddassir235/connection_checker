@@ -69,6 +69,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 ## Uses
 * https://github.com/muddassir235/kmacros
 
-## Apps by Muddassir Ahmed:
+## [Apps by Muddassir Ahmed](https://play.google.com/store/apps/developer?id=Muddassir+Khan):
 * https://play.google.com/store/apps/details?id=com.muddassirkhan.quran_android
 * https://play.google.com/store/apps/details?id=com.app.kitaabattawheed
