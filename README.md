@@ -4,6 +4,8 @@
 
 Android library for checking the internet connectivity of a device.
 
+Used in https://play.google.com/store/apps/details?id=com.muddassirkhan.quran_android
+
 ## Add Dependencies
 Add the following in your project level build.gradle
 ```groovy
@@ -66,3 +68,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
 ## Uses
 * https://github.com/muddassir235/kmacros
+
+## Apps by Muddassir Ahmed:
+* https://play.google.com/store/apps/details?id=com.muddassirkhan.quran_android
+* https://play.google.com/store/apps/details?id=com.app.kitaabattawheed
