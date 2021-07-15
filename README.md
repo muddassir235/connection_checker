@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
 
 
-###2. [Or] Using a method and a lambda callback
+### 2. [Or] Using a method and a lambda callback
 
 ```kotlin
 // this is a lifecycleOwner (e.g. Activity or ViewLifecycleOwner)
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-###3. [Or] Using a class object and an interface
+### 3. [Or] Using a class object and an interface
 
 ```kotlin
 val connectionChecker = ConnectionChecker(this)
