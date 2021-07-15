@@ -26,7 +26,7 @@ dependencies {
 
 Use this library in one of the following three ways,
 
-#### 1. Using a method and an interface
+### 1. Using a method and an interface
 
 ```kotlin
 checkConnection(this) // this: lifecycleOwner (e.g. Activity) which has implemented ConnectivityListener
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
 
 
-#### 2. [Or] Using a method and with a lambda callback
+###2. [Or] Using a method and a lambda callback
 
 ```kotlin
 // this is a lifecycleOwner (e.g. Activity or ViewLifecycleOwner)
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-#### 3. [Or] Using a class object
+###3. [Or] Using a class object and an interface
 
 ```kotlin
 val connectionChecker = ConnectionChecker(this)
