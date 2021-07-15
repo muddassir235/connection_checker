@@ -14,9 +14,16 @@
  */
 package com.muddassir.connection_checker
 
-import android.content.Context
+import android.util.Log
 import androidx.lifecycle.Lifecycle
-import com.muddassir.kmacros.delay
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.lang.Exception
 
 enum class ConnectionState {
     CONNECTED, SLOW, DISCONNECTED
@@ -26,43 +33,92 @@ interface ConnectivityListener {
     fun onConnectionState(state: ConnectionState)
 }
 
-class ConnectionChecker(private val context: Context, private val lifecycle: Lifecycle?,
-                        private val url: String = "https://www.google.com") {
-    private var currentState = ConnectionState.CONNECTED
-
+class ConnectionChecker(private val lifecycleOwner: LifecycleOwner?,
+                        private val url: String = "https://www.google.com",
+                        private val leastLifecycleState: Lifecycle.State = Lifecycle.State.RESUMED) {
     var connectivityListener: ConnectivityListener? = null
         set(value) {
-            delay(5000) { check() }
+            if(value != null) {
+                checkConnection(lifecycleOwner, url, leastLifecycleState) {
+                    value.onConnectionState(it)
+                }
+            }
+
             field = value
         }
+}
 
-    private val lifecycleIsStarted: Boolean get() = (lifecycle?.currentState?.isAtLeast(
-            Lifecycle.State.RESUMED) ?: false)
+fun checkConnection(lifecycleOwner: LifecycleOwner?,
+                    url: String = "https://www.google.com",
+                    leastLifecycleState: Lifecycle.State = Lifecycle.State.RESUMED
+) {
+    if(lifecycleOwner == null) throw java.lang.IllegalArgumentException("Unable to find lifecycle scope.")
 
-    private fun check() {
-        evaluateConnection { connectionState ->
-            if(lifecycleIsStarted and (connectionState != currentState)) {
-                connectivityListener?.onConnectionState(connectionState)
-                currentState = connectionState
-            }
+    checkConnection(lifecycleOwner, url, leastLifecycleState) {
+        (lifecycleOwner as? ConnectivityListener)?.onConnectionState(it)
+    }
+}
 
-            if(connectivityListener != null) checkAgain()
+fun checkConnection(lifecycleOwner: LifecycleOwner?,
+                    url: String = "https://www.google.com",
+                    leastLifecycleState: Lifecycle.State = Lifecycle.State.RESUMED,
+                    onConnectionState: (connectionState: ConnectionState) -> Unit
+) {
+    val scope = lifecycleOwner?.lifecycleScope
+        ?: throw java.lang.IllegalArgumentException("Unable to find lifecycle scope.")
+
+    when(leastLifecycleState) {
+        Lifecycle.State.RESUMED -> scope.launchWhenResumed {
+            checkConnection(url, onConnectionState)
         }
+        Lifecycle.State.STARTED -> scope.launchWhenStarted {
+            checkConnection(url, onConnectionState)
+        }
+        Lifecycle.State.CREATED -> scope.launchWhenCreated {
+            checkConnection(url, onConnectionState)
+        }
+        else -> throw IllegalArgumentException(
+            "leastLifecycleState should be one of CREATED, STARTED, RESUMED")
     }
+}
 
-    private fun checkAgain() {
-        delay(5000) { check() }
-    }
+private suspend fun checkConnection(url: String, onConnectionState: (connectionState: ConnectionState) -> Unit) {
+    val client: OkHttpClient = OkHttpClient().newBuilder()
+        .build()
 
-    private fun evaluateConnection(onResult: ((connectionState: ConnectionState)->Unit)) {
-        pingUrl(context, url) { failed, timeTaken ->
-            val connectionState = if(failed) {
-                ConnectionState.DISCONNECTED
-            } else {
-                if(timeTaken > 2000) ConnectionState.SLOW else ConnectionState.CONNECTED
+    withContext(Dispatchers.IO) {
+        var currentState = ConnectionState.CONNECTED
+        while (true) {
+            Log.e("******** Calling", "Connection")
+            val startTime = System.currentTimeMillis()
+            val request: Request = Request.Builder().url(url)
+                .method("GET", null).build()
+
+            val response: Response? = try {
+                client.newCall(request).execute()
+            } catch (e: Exception) {
+                null
             }
 
-            onResult.invoke(connectionState)
+            val responseCode = response?.code ?: 500
+            val timeTaken = System.currentTimeMillis() - startTime
+
+            response?.close()
+
+            withContext(Dispatchers.Main) {
+                val connectionState = if (!responseCode.toString().startsWith("2")) {
+                    ConnectionState.DISCONNECTED
+                } else {
+                    if (timeTaken > 2000) ConnectionState.SLOW else ConnectionState.CONNECTED
+                }
+
+                if (connectionState != currentState) {
+                    onConnectionState(connectionState)
+                    currentState = connectionState
+                }
+            }
+
+            kotlinx.coroutines.delay(5000)
         }
     }
 }

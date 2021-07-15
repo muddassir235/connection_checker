@@ -24,26 +24,123 @@ dependencies {
 
 ## Use The Library
 
-Instantiate an object
+Use this library in one of the following three ways,
+
+#### 1. Using a method and an interface
+
 ```kotlin
-val connectionChecker = ConnectionChecker(this, lifecycle) 
+checkConnection(this) // this: lifecycleOwner (e.g. Activity) which has implemented ConnectivityListener
 ```
 By default it will ping https://www.google.com. The user can set the url to ping.
 ```kotlin
-val connectionChecker = ConnectionChecker(this, lifecycle, "https://www.site.url") 
+checkConnection(this, "https://www.site.url")
+```
+By default the least required lifecycle state is `Lifecycle.State.RESUMED`. The user can set it to what they require.
+```kotlin
+checkConnection(this, "https://www.site.url", Lifecycle.State.STARTED)
+```
+
+Example in an Android Activity.
+```kotlin
+class MainActivity : AppCompatActivity(), ConnectivityListener {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        checkConnection(this)
+    }
+
+    override fun onConnectionState(state: ConnectionState) {
+        connection_status_tv.text = when (state) {
+            ConnectionState.CONNECTED -> {
+                "Connected"
+            }
+            ConnectionState.SLOW -> {
+                "Slow Internet Connection"
+            }
+            else -> {
+                "Disconnected"
+            }
+        }
+    }
+}
+```
+
+
+
+#### 2. [Or] Using a method and with a lambda callback
+
+```kotlin
+// this is a lifecycleOwner (e.g. Activity or ViewLifecycleOwner)
+checkConnection(this) { connectionState ->
+    // Your logic here
+}
+```
+By default it will ping https://www.google.com. The user can set the url to ping.
+```kotlin
+checkConnection(this, "https://www.site.url") { connectionState ->
+    // Your logic here
+}
+```
+By default the least required lifecycle state is Lifecycle.State.RESUMED. The user can set it to what they require.
+```kotlin
+checkConnection(this, "https://www.site.url", Lifecycle.State.STARTED) { connectionState ->
+    // Your logic here
+}
+```
+
+Example in an Android Activity.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        checkConnection(this) { connectionState ->
+            connection_status_tv.text = when(connectionState) {
+                ConnectionState.CONNECTED -> {
+                    "Connected"
+                }
+                ConnectionState.SLOW -> {
+                    "Slow Internet Connection"
+                }
+                else -> {
+                    "Disconnected"
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+#### 3. [Or] Using a class object
+
+```kotlin
+val connectionChecker = ConnectionChecker(this)
+```
+By default it will ping https://www.google.com. The user can set the url to ping.
+```kotlin
+val connectionChecker = ConnectionChecker(this, "https://www.site.url")
+```
+By default the least required lifecycle state is Lifecycle.State.RESUMED. The user can set it to what they require.
+```kotlin
+val connectionChecker = ConnectionChecker(this, "https://www.site.url", Lifecycle.State.STARTED)
 ```
 
 Add connectivity listener
 ```kotlin
 connectionChecker.connectivityListener = object: ConnectivityListener {
     override fun onConnectionState(state: ConnectionState) {
-
+        // Your logic goes here
     }
 }
 ```
 
-## Example
 Example in an Android Activity.
+
 ```kotlin
 class MainActivity : AppCompatActivity(), ConnectivityListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,18 +152,23 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     override fun onConnectionState(state: ConnectionState) {
-        connection_status_tv.text = if(state == ConnectionState.CONNECTED) {
-            "Connected"
-        } else if(state == ConnectionState.SLOW) {
-            "Slow Internet Connection"
-        } else {
-            "Disconnected"
+        connection_status_tv.text = when (state) {
+            ConnectionState.CONNECTED -> {
+                "Connected"
+            }
+            ConnectionState.SLOW -> {
+                "Slow Internet Connection"
+            }
+            else -> {
+                "Disconnected"
+            }
         }
     }
 }
 ```
 
 ## Uses
+
 * https://github.com/muddassir235/kmacros
 
 ## [Apps by Muddassir Ahmed](https://play.google.com/store/apps/developer?id=Muddassir+Khan):
