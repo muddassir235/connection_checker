@@ -18,26 +18,6 @@ class ConnectionCheckerTest {
 
     @Test
     fun checkConnectedState() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            val connectionChecker = ConnectionChecker(context, null)
-            connectionChecker.connectivityListener = object: ConnectivityListener {
-                override fun onConnected() {
-                    assertTrue(false)
-                }
-
-                override fun onDisconnected() {
-                    assertTrue(true)
-                }
-
-                override fun onConnectionSlow() {
-                    assertTrue(false)
-                }
-            }
-
-            // Disconnect from the internet. How do I do this?
-        }
-
-        Thread.sleep(30000)
+        // TODO: Add instrumented test
     }
 }
